@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const URL = "http://localhost:8000";
+const URL = "https://react-pets-backend.herokuapp.com";
 
 function getPets() {
   return axios.get(`${URL}/pets`);
