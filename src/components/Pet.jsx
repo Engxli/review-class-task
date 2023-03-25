@@ -1,6 +1,19 @@
 import React from "react";
-
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { adoptPet } from "../utils/apis/pets";
 function Pet({ pet }) {
+  const queryClient = useQueryClient();
+
+  const { mutate } = useMutation(
+    () => {
+      return adoptPet(pet);
+    },
+    {
+      onSuccess: () => {
+        queryClient.invalidateQueries("pets");
+      },
+    }
+  );
   return (
     <div className="col-md-6 col-lg-4 mb-5">
       <div
@@ -13,13 +26,15 @@ function Pet({ pet }) {
             <i className="fas fa-plus fa-3x"></i>
           </div>
         </div>
-        <img className="img-fluid" src={pet.img} alt="..." />
+        <img className="img-fluid" src={pet.image} alt="..." />
       </div>
       <h2 className="page-section-heading text-center text-uppercase text-secondary mb-0">
         {pet.name}
-        <button className="btn btn-primary" type="button">
-          Adopt
-        </button>
+        {(!pet.adopted || pet.adopted == "false") && (
+          <button className="btn btn-primary" type="button" onClick={mutate}>
+            Adopt
+          </button>
+        )}
       </h2>
     </div>
   );

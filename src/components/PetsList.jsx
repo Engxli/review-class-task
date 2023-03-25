@@ -2,12 +2,13 @@ import React, { useState } from "react";
 
 import SearchBar from "./SearchBar";
 import Pet from "./Pet";
-import petsData from "../data/petsData";
-
+import { useQuery } from "@tanstack/react-query";
+import { getPets } from "../utils/apis/pets";
 function PetsList() {
   const [query, setQuery] = useState("");
-
-  const pets = petsData
+  const { data } = useQuery(["pets"], getPets);
+  console.log(data?.data);
+  const pets = data?.data
     .filter((pet) => pet.name.toLowerCase().includes(query.toLowerCase()))
     .map((pet) => <Pet pet={pet} />);
   return (
